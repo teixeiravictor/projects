@@ -1,0 +1,7 @@
+.icon-down {
+  @include sprite('icon-down');
+
+  display: block;
+  height: 48px;
+  width: 48px;
+}

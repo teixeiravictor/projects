@@ -1,0 +1,98 @@
+$sprites: (
+    'icon-card-arrow-right': "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7.77 13.589'%3e%3cpath d='M5.428 6.792L.286 1.654a.967.967 0 010-1.372.979.979 0 011.376 0l5.825 5.822a.969.969 0 01.028 1.339l-5.85 5.861a.972.972 0 11-1.376-1.372z' fill='%2319b5f1'/%3e%3c/svg%3e",
+    'icon-down': "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3e%3cdefs%3e%3cstyle%3e.a%7bfill:white%7d%3c/style%3e%3c/defs%3e%3cg transform='translate(-223 -87)'%3e%3cg transform='rotate(-90 179 -44)'%3e%3cpath class='a' d='M24 0a24 24 0 1024 24A24.026 24.026 0 0024 0zm0 46a22 22 0 1122-22 22.025 22.025 0 01-22 22z'/%3e%3cpath class='a' d='M28.707 12.293a1 1 0 00-1.414 0l-11 11a1 1 0 000 1.414l11 11a1 1 0 001.414-1.414L18.414 24l10.293-10.293a1 1 0 000-1.414z'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e",
+    'icon-quotation-bottom': "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26.459 21.666'%3e%3cpath d='M11.644 0H2.959v10.022h3.436c.286 4.1-1.623 6.586-6.395 8.3l1.145 3.341c7.254-1.623 10.5-5.345 10.5-13.076zm14.815 0h-8.776v10.022h3.527c.286 4.1-1.623 6.586-6.395 8.3l1.145 3.341c7.254-1.623 10.5-5.345 10.5-13.076z' fill='%2319b5f1'/%3e%3c/svg%3e",
+    'icon-quotation-top': "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26.459 21.666'%3e%3cpath d='M14.815 21.666H23.5V11.644h-3.436c-.286-4.1 1.623-6.586 6.395-8.3L25.314.003c-7.254 1.623-10.5 5.345-10.5 13.076zM0 21.666h8.776V11.644H5.249c-.286-4.1 1.623-6.586 6.395-8.3L10.499.003C3.245 1.626-.001 5.348-.001 13.079z' fill='%2319b5f1'/%3e%3c/svg%3e",
+    'icon-slide-left': "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11.229 20.395'%3e%3cg transform='translate(-55.113 -.001)'%3e%3cpath d='M55.411 10.926l9.171 9.168a1.03 1.03 0 001.458-1.455L57.6 10.2l8.44-8.442A1.031 1.031 0 0064.582.3L55.41 9.47a1.039 1.039 0 00.001 1.456z' fill='%2319b5f1'/%3e%3c/g%3e%3c/svg%3e",
+    'icon-slide-right': "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11.229 20.395'%3e%3cg transform='rotate(180 32.671 10.198)'%3e%3cpath d='M54.411 10.926l9.171 9.168a1.03 1.03 0 001.458-1.455L56.6 10.2l8.44-8.442A1.031 1.031 0 0063.582.3L54.41 9.47a1.039 1.039 0 00.001 1.456z' fill='%2319b5f1'/%3e%3c/g%3e%3c/svg%3e"
+);
+
+$sizes: (
+    'icon-card-arrow-right': (
+        'width': 7.77px,
+        'height': 13.589px
+    ),
+    'icon-down': (
+        'width': 48px,
+        'height': 48px
+    ),
+    'icon-quotation-bottom': (
+        'width': 26.459px,
+        'height': 21.666px
+    ),
+    'icon-quotation-top': (
+        'width': 26.459px,
+        'height': 21.666px
+    ),
+    'icon-slide-left': (
+        'width': 11.229px,
+        'height': 20.395px
+    ),
+    'icon-slide-right': (
+        'width': 11.229px,
+        'height': 20.395px
+    )
+);
+
+$variables: (
+    /* EMPTY */
+);
+
+// https://github.com/waldemarfm/sass-svg-uri/blob/v1.0.0/_svg-uri.scss
+@function sprite-str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+
+    @if type-of($replace) == 'null' {
+        $replace: '';
+    }
+
+    @if ( $index ) {
+        @return str-slice($string, 1, $index - 1) + $replace + sprite-str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+
+    @return $string;
+}
+
+@function sprite-svg-uri($value) {
+    $encoded: '';
+    $slice: 2000;
+    $index: 0;
+
+    @for $i from 1 through ceil(str-length($value) / $slice) {
+        $chunk: str-slice($value, $index, $index + $slice - 1);
+        $chunk: sprite-str-replace($chunk, '"', "'");
+        $chunk: sprite-str-replace($chunk, '<', '%3C');
+        $chunk: sprite-str-replace($chunk, '>', '%3E');
+        $chunk: sprite-str-replace($chunk, '&', '%26');
+        $chunk: sprite-str-replace($chunk, '#', '%23');
+        $encoded: #{$encoded}#{$chunk};
+        $index: $index + $slice;
+    }
+
+    @return $encoded;
+}
+
+@mixin sprite($name, $user-variables: (), $include-size: false) {
+    $sprite: map-get($sprites, $name);
+
+    // Inject variables
+    $default-variables: map-get($variables, $name);
+    @if type-of($default-variables) == 'map' {
+        @each $key, $value in map-merge($default-variables, $user-variables) {
+            @if ( not map-has-key($default-variables, $key) ) {
+                @warn 'Sprite \'#{$name}\' does not support variable named \'#{$key}\'';
+            }
+
+            $sprite: sprite-str-replace($sprite, '___#{$key}___', sprite-svg-uri(quote(#{$value})));
+        }
+    } @else if type-of($user-variables) == 'map' {
+        @warn 'Sprite \'#{$name}\' does not contain any variables';
+    }
+
+    background: url($sprite) center no-repeat;
+
+    @if $include-size {
+        $size: map-get($sizes, $name);
+        background-size: map-get($size, width) map-get($size, height);
+    }
+}
